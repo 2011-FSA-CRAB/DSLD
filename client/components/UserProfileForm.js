@@ -64,7 +64,7 @@ export default function UserProfileForm() {
       let userRef = app.firestore().collection('users');
       let userName = userRef.where('username', '==', usernameRef.current.value);
 
-      console.log(userName.data());
+      console.log(userName);
 
       // ensures username is not taken
       if (userName !== null) {
