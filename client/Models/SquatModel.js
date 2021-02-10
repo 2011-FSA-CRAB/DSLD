@@ -64,6 +64,7 @@ export function Model() {
     videoElement.setAttribute('playsinline', true);
     videoElement.muted = 'true';
     videoElement.id = 'webcamVideo';
+    videoElement.setAttribute('display', 'none');
 
     await webcam.play();
     console.log(webcam.setup);
@@ -261,7 +262,7 @@ export function Model() {
       </TopToolbar>
       <ModelContainer>
         <Webcam>
-          <video id="webcam-container" display="none" height="0"></video>
+          <div id="webcam-container" display="none" height="0"></div>
           <canvas width="640" height="640" id="canvas"></canvas>
           <WebcamToolbar>
             <Label id="rep-container"></Label>
