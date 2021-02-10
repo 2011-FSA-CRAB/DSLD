@@ -66,6 +66,8 @@ export function Model() {
     // const size = 640;
     const flip = true;
 
+    let mobile = isMobile();
+
     let videoMediaConstraints = {
       width: mobile ? undefined : videoWidth,
       height: mobile ? undefined : videoHeight,
@@ -97,8 +99,8 @@ export function Model() {
 
     // append/get elements to the DOM
     const canvas = document.getElementById('canvas');
-    canvas.width = size;
-    canvas.height = size;
+    canvas.width = videoWidth;
+    canvas.height = videoHeight;
     ctx = canvas.getContext('2d');
     labelContainer = document.getElementById('label-container');
     for (let i = 0; i < maxPredictions; i++) {
