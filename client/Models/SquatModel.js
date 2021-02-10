@@ -21,6 +21,8 @@ let totalReps = 5;
 let successfulReps = totalReps;
 let reps = totalReps;
 let predictStatus = 'pending';
+let videoWidth = 640;
+let videoHeight = 640;
 
 export function Model() {
   // Hooks
@@ -40,6 +42,18 @@ export function Model() {
   const URL = 'https://teachablemachine.withgoogle.com/models/gzTttOI1O/';
   let model, webcam, ctx, labelContainer, maxPredictions;
 
+  function isAndroid() {
+    return /Android/i.test(navigator.userAgent);
+  }
+
+  function isiOS() {
+    return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  }
+
+  function isMobile() {
+    return isAndroid() || isiOS();
+  }
+
   async function init() {
     const modelURL = URL + 'model.json';
     const metadataURL = URL + 'metadata.json';
@@ -49,10 +63,20 @@ export function Model() {
 
     maxPredictions = model.getTotalClasses();
 
-    const size = 640;
+    // const size = 640;
     const flip = true;
-    webcam = new tmPose.Webcam(size, size, flip); // width, height, flip
-    await webcam.setup({ facingMode: 'user', aspectRatio: 1 }); // request access to the webcam
+
+    let videoMediaConstraints = {
+      width: mobile ? undefined : videoWidth,
+      height: mobile ? undefined : videoHeight,
+    };
+
+    webcam = new tmPose.Webcam(videoWidth, videoHeight, flip); // width, height, flip
+    await webcam.setup({
+      facingMode: 'user',
+      width: videoWidth,
+      height: videoHeight,
+    }); // request access to the webcam
 
     let iosVid = document
       .getElementById('webcam-container')
@@ -180,7 +204,11 @@ export function Model() {
 
   function drawPose(pose, color) {
     if (webcam.canvas) {
-      ctx.drawImage(webcam.canvas, 0, 0);
+      ctx.save();
+      ctx.scale(-1, 1);
+      ctx.translate(-videoWidth, 0);
+      ctx.drawImage(webcam.canvas, 0, 0, videoWidth, videoHeight);
+      ctx.restore();
       if (pose) {
         const minPartConfidence = 0.5;
 
